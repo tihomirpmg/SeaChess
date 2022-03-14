@@ -1,0 +1,55 @@
+﻿<td class="btn btn-light" id="1" @onclick="@OnClickMethod">
+    <a style="font-size: 65px;">@XO</a>
+</td>
+
+@using Pages;
+
+@code {
+    public static string XO;
+
+    public void PlayerChange()
+    {
+        if (MultiPlayer.player == true)
+        {
+            MultiPlayer.player = false;
+        }
+        else
+        {
+            MultiPlayer.player = true;
+        }
+        CounterComponent.Counter();
+    }
+
+    public void OnClickMethod()
+    {
+        if (CounterComponent.endgame && XO == null)
+        {
+
+
+            if (MultiPlayer.player == true)
+            {
+                XO = "X";
+            }
+            else
+            {
+                XO = "O";
+            }
+            PlayerChange();
+
+            var timer = new Timer(new TimerCallback(_ =>
+            {
+                if (Count > 0)
+                {
+                    Count--;
+
+                    InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+                }
+            }), null, 1000, 1000);
+        }
+    }
+    private int Count { get; set; } = 10;
+    @using System.Threading;
+}

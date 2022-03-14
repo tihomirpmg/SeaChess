@@ -1,0 +1,60 @@
+﻿<td class="btn btn-light" disabled=@IsClicked @onclick="@OnClickMethod">
+    <a style="font-size: 65px;">@XO</a>
+</td>
+
+@using Pages;
+
+@code {
+    public static string XO;
+    bool IsClicked;
+    public void PlayerChange()
+    {
+        if (SinglePlayer.player == true)
+        {
+            SinglePlayer.player = false;
+        }
+        else
+        {
+            SinglePlayer.player = true;
+        }
+
+    }
+
+    public void OnClickMethod()
+    {
+        if (CounterComponent.endgame)
+        {
+
+
+            if (SinglePlayer.player == true)
+            {
+                XO = "X";
+                IsClicked = true;
+                StateHasChanged();
+            }
+            CounterComponent.Counter();
+            if (CounterComponent.endgame)
+            {
+                CheckButtons.Check(6);
+                CounterComponent.Counter();
+            }
+
+            var timer = new Timer(new TimerCallback(_ =>
+            {
+                if (Count > 0)
+                {
+                    Count--;
+
+                    InvokeAsync(() =>
+                    {
+
+                        StateHasChanged();
+                    });
+                }
+            }), null, 1000, 1000);
+        }
+    }
+    private int Count { get; set; } = 10;
+    @using System.Threading;
+}
+

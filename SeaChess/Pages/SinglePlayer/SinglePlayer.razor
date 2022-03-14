@@ -1,0 +1,133 @@
+﻿@page "/SinglePlayer"
+@using Pages;
+@inject NavigationManager uriHelper;
+@using System.Threading;
+
+<body style="background-color:powderblue;">
+
+    <h1 class="text-center">Single Player</h1>
+
+    <style>
+        .sea-chess-board {
+            margin-left: 418px;
+        }
+
+        .sea-chess-board {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+            .sea-chess-board td {
+                border: 8px solid;
+                width: 8em;
+                height: 8em;
+            }
+
+            .sea-chess-board .btn-light {
+                background: #eee;
+            }
+    </style>
+
+    <style>
+        .button-new-game {
+            margin-left: 556px;
+            margin-top: 50px;
+        }
+    </style>
+
+    <style>
+        .label {
+            margin-left: 520px;
+        }
+    </style>
+
+    <table class="sea-chess-board">
+        <tbody>
+            <tr>
+                <ButtonComponent></ButtonComponent>
+                <ButtonComponent2></ButtonComponent2>
+                <ButtonComponent3></ButtonComponent3>
+            </tr>
+        </tbody>
+    </table>
+    <table class="sea-chess-board">
+        <tbody>
+            <tr>
+                <ButtonComponent4></ButtonComponent4>
+                <ButtonComponent5></ButtonComponent5>
+                <ButtonComponent6></ButtonComponent6>
+            </tr>
+        </tbody>
+    </table>
+    <table class="sea-chess-board">
+        <tbody>
+            <tr>
+                <ButtonComponent7></ButtonComponent7>
+                <ButtonComponent8></ButtonComponent8>
+                <ButtonComponent9></ButtonComponent9>
+            </tr>
+        </tbody>
+    </table>
+
+    <label class="label" style="color: black; font-weight: 600; background: #eee; border: 8px; font-size: 30px">@label</label>
+
+    <br />
+
+    <button class="button-new-game" @onclick="@Winner">
+        Нова Игра!
+    </button>
+
+    <br />
+    <br />
+
+    <div class="box-parent">
+        <div class="box">Player 1 points: @player1Count</div>
+        <style>
+            .box-parent {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .box {
+                background-color: white;
+                border: 2px solid;
+                margin: 20px;
+                padding: 20px;
+            }
+        </style>
+        <div class="box">Computer points: @player2Count</div>
+    </div>
+</body>
+
+@code {
+    public static string label;
+    public static bool player = true;
+    public static int player1Count = 0;
+    public static int player2Count = 0;
+
+    public void Winner()
+    {
+        ButtonComponent.XO = null;
+        ButtonComponent2.XO = null;
+        ButtonComponent3.XO = null;
+        ButtonComponent4.XO = null;
+        ButtonComponent5.XO = null;
+        ButtonComponent6.XO = null;
+        ButtonComponent7.XO = null;
+        ButtonComponent8.XO = null;
+        ButtonComponent9.XO = null;
+        label = null;
+        CounterComponent.endgame = true;
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var timer = new Timer(new TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 1000, 1000);
+        }
+    }
+}

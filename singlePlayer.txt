@@ -1,0 +1,175 @@
+@page "/SinglePlayer"
+@using Pages;
+@inject NavigationManager uriHelper;
+@using System.Threading;
+ 
+<body style="background-color:powderblue;">
+ 
+    <h1 class="text-center">Single Player</h1>
+ 
+    <style>
+        .sea-chess-board {
+            margin-left: 418px;
+        }
+ 
+        .sea-chess-board {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+ 
+            .sea-chess-board td {
+                border: 8px solid;
+                width: 8em;
+                height: 8em;
+            }
+ 
+            .sea-chess-board .btn-light {
+                background: #eee;
+            }
+    </style>
+ 
+    <style>
+        .button-new-game {
+            margin-left: 556px;
+            margin-top: 50px;
+        }
+    </style>
+ 
+    <style>
+        .label {
+            margin-left: 520px;
+        }
+    </style>
+ 
+    <table class="sea-chess-board">
+        <tbody>
+            <tr>
+                <ButtonComponent></ButtonComponent>
+                <ButtonComponent2></ButtonComponent2>
+                <ButtonComponent3></ButtonComponent3>
+            </tr>
+        </tbody>
+    </table>
+    <table class="sea-chess-board">
+        <tbody>
+            <tr>
+                <ButtonComponent4></ButtonComponent4>
+                <ButtonComponent5></ButtonComponent5>
+                <ButtonComponent6></ButtonComponent6>
+            </tr>
+        </tbody>
+    </table>
+    <table class="sea-chess-board">
+        <tbody>
+            <tr>
+                <ButtonComponent7></ButtonComponent7>
+                <ButtonComponent8></ButtonComponent8>
+                <ButtonComponent9></ButtonComponent9>
+            </tr>
+        </tbody>
+    </table>
+ 
+    <label class="label" style="color: black; font-weight: 600; background: #eee; border: 8px; font-size: 30px">@label</label>
+ 
+    <br />
+ 
+    <button class="button-new-game" @onclick="@Winner">
+        Нова Игра!
+    </button>
+ 
+    <br />
+    <br />
+ 
+    <div class="box-parent">
+        <div class="box">Player 1 points: @player1Count</div>
+        <style>
+            .box-parent {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+ 
+            .box {
+                background-color: white;
+                border: 2px solid;
+                margin: 20px;
+                padding: 20px;
+            }
+        </style>
+        <div class="box">Player 2 points: @player2Count</div>
+    </div>
+</body>
+ 
+@code {
+    public static string label;
+    public static bool player = true;
+    public static int player1Count = 0;
+    public static int player2Count = 0;
+ 
+ 
+ 
+    public static void Computer(int position)
+    {
+        string[] items = { ButtonComponent.XO, ButtonComponent2.XO, ButtonComponent3.XO, ButtonComponent4.XO, ButtonComponent5.XO, ButtonComponent6.XO, ButtonComponent7.XO, ButtonComponent8.XO, ButtonComponent9.XO };
+        List<int> numbers = new List<int>
+        {
+            1,2,3,4,5,6,7,8,9
+        };
+        numbers.Remove(position);
+ 
+        List<string> listitems = new List<string>(items);
+ 
+        Random rnd = new Random();
+        int mIndex = rnd.Next(numbers.Count);
+ 
+        switch (listitems[numbers[mIndex]])
+        {
+            case "X":
+                {
+                        Computer(position);
+                    break;
+                }
+            case null:
+                {
+                    listitems[mIndex] = "O";
+                    break;
+                }
+        }
+        ButtonComponent.XO = listitems[0];
+        ButtonComponent2.XO = listitems[1];
+        ButtonComponent3.XO = listitems[2];
+        ButtonComponent4.XO = listitems[3];
+        ButtonComponent5.XO = listitems[4];
+        ButtonComponent6.XO = listitems[5];
+        ButtonComponent7.XO = listitems[6];
+        ButtonComponent8.XO = listitems[7];
+        ButtonComponent9.XO = listitems[8];
+ 
+    }
+ 
+ 
+    public void Winner()
+    {
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+        ButtonComponent.XO = null;
+        ButtonComponent2.XO = null;
+        ButtonComponent3.XO = null;
+        ButtonComponent4.XO = null;
+        ButtonComponent5.XO = null;
+        ButtonComponent6.XO = null;
+        ButtonComponent7.XO = null;
+        ButtonComponent8.XO = null;
+        ButtonComponent9.XO = null;
+    }
+ 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var timer = new Timer(new TimerCallback(_ =>
+            {
+                uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);
+            }), null, 1000, 1000);
+        }
+    }
+}
